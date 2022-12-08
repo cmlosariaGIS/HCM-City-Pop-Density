@@ -12,10 +12,6 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js" type="text/javascript"></script>
 
-	<!-- Leaflet Plugins -->
-	<link rel="stylesheet" href="../src/Control.MiniMap.css" />
-	<script src="../src/Control.MiniMap.js" type="text/javascript"></script>
-
 <style>
 /* <!--This is a comment. Leaflet requires a <div> element to contain the map and that that <div> element have a set height.--> */
 body {margin:0; padding0;}
@@ -456,7 +452,7 @@ function getColor(d) {
            d > 34434  ? '#BD0026' :
            d > 22519  ? '#E31A1C' :
            d > 14936  ? '#FC4E2A' :
-           d > 10446   ? '#FD8D3C' :
+           d > 10446  ? '#FD8D3C' :
            d > 5000   ? '#FEB24C' :
            d > 1838   ? '#FED976' :
                       '#FFEDA0';
@@ -524,7 +520,7 @@ info.onAdd = function (map) {
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
     this._div.innerHTML = '<h2>Hồ Chí Minh City Population Density</h2>' +  (props ?
-    'District: ' + '<b>' + props.NAME_2 + '</b><br/>' + 'Ward: ' + '<b>' + props.NAME_3 + '</b><br/>' + "Population Density: " + '<b>' + props.Mật_đ + 'people/km<sup>2</sup>' + '</b>'
+    'District: ' + '<b>' + props.NAME_2 + '</b><br/>' + 'Ward: ' + '<b>' + props.NAME_3 + '</b><br/>' + "Population Density: " + '<b>' + props.Mật_đ + ' people/km<sup>2</sup>' + '</b>'
         : 'Hover over a ward to see information');
 };
 
@@ -582,105 +578,6 @@ let basemapControl = {
 
 // display the control (switcher list) on the map, by default in the top right corner
 L.control.layers( basemapControl ).addTo( map )
-
-// add Home button
-var lat = 10.78218;
-var lng = 106.69748;
-var zoom = 11;
-
-// set up the map and remove the default zoomControl
-var map = L.map('map', {
-    zoomControl: false
-});
-
-map.setView([10.78218,106.69748], 11);
-L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 18
-}).addTo(map);
-
-// custom zoom bar control that includes a Zoom Home function
-L.Control.zoomHome = L.Control.extend({
-    options: {
-        position: 'topright',
-        zoomInText: '+',
-        zoomInTitle: 'Zoom in',
-        zoomOutText: '-',
-        zoomOutTitle: 'Zoom out',
-        zoomHomeText: '<i class="fa fa-home" style="line-height:1.65;"></i>',
-        zoomHomeTitle: 'Zoom home'
-    },
-
-    onAdd: function (map) {
-        var controlName = 'gin-control-zoom',
-            container = L.DomUtil.create('div', controlName + ' leaflet-bar'),
-            options = this.options;
-
-        this._zoomInButton = this._createButton(options.zoomInText, options.zoomInTitle,
-        controlName + '-in', container, this._zoomIn);
-        this._zoomHomeButton = this._createButton(options.zoomHomeText, options.zoomHomeTitle,
-        controlName + '-home', container, this._zoomHome);
-        this._zoomOutButton = this._createButton(options.zoomOutText, options.zoomOutTitle,
-        controlName + '-out', container, this._zoomOut);
-
-        this._updateDisabled();
-        map.on('zoomend zoomlevelschange', this._updateDisabled, this);
-
-        return container;
-    },
-
-    onRemove: function (map) {
-        map.off('zoomend zoomlevelschange', this._updateDisabled, this);
-    },
-
-    _zoomIn: function (e) {
-        this._map.zoomIn(e.shiftKey ? 3 : 1);
-    },
-
-    _zoomOut: function (e) {
-        this._map.zoomOut(e.shiftKey ? 3 : 1);
-    },
-
-    _zoomHome: function (e) {
-        map.setView([10.78218,106.69748], 11);
-    },
-
-    _createButton: function (html, title, className, container, fn) {
-        var link = L.DomUtil.create('a', className, container);
-        link.innerHTML = html;
-        link.href = '#';
-        link.title = title;
-
-        L.DomEvent.on(link, 'mousedown dblclick', L.DomEvent.stopPropagation)
-            .on(link, 'click', L.DomEvent.stop)
-            .on(link, 'click', fn, this)
-            .on(link, 'click', this._refocusOnMap, this);
-
-        return link;
-    },
-
-    _updateDisabled: function () {
-        var map = this._map,
-            className = 'leaflet-disabled';
-
-        L.DomUtil.removeClass(this._zoomInButton, className);
-        L.DomUtil.removeClass(this._zoomOutButton, className);
-
-        if (map._zoom === map.getMinZoom()) {
-            L.DomUtil.addClass(this._zoomOutButton, className);
-        }
-        if (map._zoom === map.getMaxZoom()) {
-            L.DomUtil.addClass(this._zoomInButton, className);
-        }
-    }
-});
-// add the new control to the map
-var zoomHome = new L.Control.zoomHome();
-zoomHome.addTo(map);
-
-// ADDS A MINIMAP
-var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib});
-var miniMap = new L.Control.MiniMap(osm2).addTo(map);
-
 
 
 </script>
