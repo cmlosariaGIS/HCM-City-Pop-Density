@@ -6,18 +6,15 @@
 
 <title>Leaflet Web Map</title>
 <!--This is a comment. To make use of Leaflet we need to reference its CSS and JavaScript files in the HTML file.-->
-   <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
-      integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-      crossorigin=""
-    />
+<meta charset="utf-8" />
 
-    <script
-      src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-      crossorigin=""
-    ></script>
+	<!-- Leaflet -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js" type="text/javascript"></script>
+
+	<!-- Leaflet Plugins -->
+	<link rel="stylesheet" href="../src/Control.MiniMap.css" />
+	<script src="../src/Control.MiniMap.js" type="text/javascript"></script>
 
 <style>
 /* <!--This is a comment. Leaflet requires a <div> element to contain the map and that that <div> element have a set height.--> */
@@ -29,7 +26,10 @@ body {margin:0; padding0;}
             width: 100%;
         } 
     */
-}
+/* Add a homebutton */
+    { height: 340px; }
+.leaflet-bar a { background-color: #fff; border-bottom: 1px solid #ccc; color: #444; display: block; height: 26px; width: 26px; line-height: 1.45 !important; text-align: center; text-decoration: none; font: bold 18px 'Lucida Console', Monaco, monospace; }
+
 /*<!--This is a comment. Leaflet requires a <div> element to contain the map and that that <div> element have a set height.-->*/
 </style>
 
@@ -66,12 +66,14 @@ body {margin:0; padding0;}
 <!--This is a comment. Leaflet requires a <div> element to contain the map and that that <div> element have a set height.-->
     <div id="map"></div>
 
+	</script>
+    
 <script>
 /* <!--This is a comment. The first script we will write pulls in some map tiles and configures a few basic map settings.--> */
     var map = L.map('map',{
     center: [10.78218,106.69748],
     scrollWheelZoom: true,
-    zoom: 10
+    zoom: 11
     });
 /* <!--This is a comment. Find more basemaps: https://leaflet-extras.github.io/leaflet-providers/preview/ */
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -92,7 +94,7 @@ body {margin:0; padding0;}
 }).addTo(map);*/
     
 
-var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+/* var CartoDB_DarkMatter = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
 attribution: '© OpenStreetMap contributors © CARTO',
 subdomains: 'abcd',
 	maxZoom: 19
@@ -121,7 +123,7 @@ minZoom: 1,
 maxZoom: 16,
 ext: 'jpg'
 });
-Stamen_Watercolor.addTo(map);
+Stamen_Watercolor.addTo(map);  */
 
 var hcm = {"type":"FeatureCollection", "features": [
 {"type":"Feature","geometry":{"type":"Polygon","coordinates":[[[106.62373352100019,10.692982673000131],[106.62071228000008,10.699774741999988],[106.61856079200004,10.699030876999984],[106.61812591600011,10.697731970999996],[106.61489105200013,10.697760582000171],[106.60959625200013,10.695403099000032],[106.60481262200011,10.69569683100002],[106.60146331800007,10.695123673000012],[106.5989227290001,10.698650361000148],[106.59780883700012,10.701824188000103],[106.59732818700013,10.701690674000076],[106.59691619800009,10.697180748000164],[106.59346771300011,10.686504365000076],[106.59213256800007,10.684330940000109],[106.59712982200017,10.682795526000064],[106.59896087600015,10.682963371000028],[106.60022735500002,10.682072640000115],[106.59939575100015,10.681539535000127],[106.60009765700016,10.681132318000095],[106.6034851080002,10.68041992200017],[106.60102844300008,10.678738593000048],[106.60009765700016,10.675627708000093],[106.60139465300017,10.674145698000075],[106.60514831600017,10.672390937999978],[106.60656738200015,10.67404556300005],[106.61026001000016,10.67600631800019],[106.61145019600002,10.678668975000107],[106.614913941,10.67748165200004],[106.62200164800015,10.692165375000059],[106.62373352100019,10.692982673000131]]]},"properties":{"NAME_1":"Hồ Chí Minh","NAME_2":"Bình Chánh","NAME_3":"An Phú Tây","Phường_":"An Phú Tây","Mật_đ":3796,"Dân_số":22282,"Diện_tí":5.87,"Biên_ch":36,"Tỉ_lệ_":619}},
@@ -522,7 +524,7 @@ info.onAdd = function (map) {
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
     this._div.innerHTML = '<h2>Hồ Chí Minh City Population Density</h2>' +  (props ?
-        '<b>' + 'Ward: ' + props.NAME_3 + '</b><br />' + "Pop Dens: " + props.Mật_đ + ' people/km<sup>2</sup>'
+    'District: ' + '<b>' + props.NAME_2 + '</b><br/>' + 'Ward: ' + '<b>' + props.NAME_3 + '</b><br/>' + "Population Density: " + '<b>' + props.Mật_đ + 'people/km<sup>2</sup>' + '</b>'
         : 'Hover over a ward to see information');
 };
 
@@ -548,6 +550,136 @@ legend.onAdd = function (map) {
 
 legend.addTo(map);
 
+/* This example is similar to the leaflet-layer-control.js example:
+ * (https://gist.github.com/geog4046instructor/65f38124e3f56f11c9461b23335c0c92)
+ * but this example only adds basemaps (tileLayer) to the control.
+ */
+
+// create a satellite imagery layer
+let Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+ attribution: 'Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors',
+subdomains: 'abcd',
+minZoom: 1,
+maxZoom: 16,
+ext: 'jpg'
+}).addTo(map)
+
+ // create a street map layer and add it to the map, making it the default basemap
+let streets = L.tileLayer( 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' )
+
+// create a satellite imagery layer
+let satellite = L.tileLayer( 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}' )
+
+
+
+// create an object to hold layer names as you want them to appear in the basemap switcher list
+let basemapControl = {
+  "Stamen Watercolor": Stamen_Watercolor,
+  "Streets": streets,
+  "Satellite": satellite
+  
+}
+
+// display the control (switcher list) on the map, by default in the top right corner
+L.control.layers( basemapControl ).addTo( map )
+
+// add Home button
+var lat = 10.78218;
+var lng = 106.69748;
+var zoom = 11;
+
+// set up the map and remove the default zoomControl
+var map = L.map('map', {
+    zoomControl: false
+});
+
+map.setView([10.78218,106.69748], 11);
+L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18
+}).addTo(map);
+
+// custom zoom bar control that includes a Zoom Home function
+L.Control.zoomHome = L.Control.extend({
+    options: {
+        position: 'topright',
+        zoomInText: '+',
+        zoomInTitle: 'Zoom in',
+        zoomOutText: '-',
+        zoomOutTitle: 'Zoom out',
+        zoomHomeText: '<i class="fa fa-home" style="line-height:1.65;"></i>',
+        zoomHomeTitle: 'Zoom home'
+    },
+
+    onAdd: function (map) {
+        var controlName = 'gin-control-zoom',
+            container = L.DomUtil.create('div', controlName + ' leaflet-bar'),
+            options = this.options;
+
+        this._zoomInButton = this._createButton(options.zoomInText, options.zoomInTitle,
+        controlName + '-in', container, this._zoomIn);
+        this._zoomHomeButton = this._createButton(options.zoomHomeText, options.zoomHomeTitle,
+        controlName + '-home', container, this._zoomHome);
+        this._zoomOutButton = this._createButton(options.zoomOutText, options.zoomOutTitle,
+        controlName + '-out', container, this._zoomOut);
+
+        this._updateDisabled();
+        map.on('zoomend zoomlevelschange', this._updateDisabled, this);
+
+        return container;
+    },
+
+    onRemove: function (map) {
+        map.off('zoomend zoomlevelschange', this._updateDisabled, this);
+    },
+
+    _zoomIn: function (e) {
+        this._map.zoomIn(e.shiftKey ? 3 : 1);
+    },
+
+    _zoomOut: function (e) {
+        this._map.zoomOut(e.shiftKey ? 3 : 1);
+    },
+
+    _zoomHome: function (e) {
+        map.setView([10.78218,106.69748], 11);
+    },
+
+    _createButton: function (html, title, className, container, fn) {
+        var link = L.DomUtil.create('a', className, container);
+        link.innerHTML = html;
+        link.href = '#';
+        link.title = title;
+
+        L.DomEvent.on(link, 'mousedown dblclick', L.DomEvent.stopPropagation)
+            .on(link, 'click', L.DomEvent.stop)
+            .on(link, 'click', fn, this)
+            .on(link, 'click', this._refocusOnMap, this);
+
+        return link;
+    },
+
+    _updateDisabled: function () {
+        var map = this._map,
+            className = 'leaflet-disabled';
+
+        L.DomUtil.removeClass(this._zoomInButton, className);
+        L.DomUtil.removeClass(this._zoomOutButton, className);
+
+        if (map._zoom === map.getMinZoom()) {
+            L.DomUtil.addClass(this._zoomOutButton, className);
+        }
+        if (map._zoom === map.getMaxZoom()) {
+            L.DomUtil.addClass(this._zoomInButton, className);
+        }
+    }
+});
+// add the new control to the map
+var zoomHome = new L.Control.zoomHome();
+zoomHome.addTo(map);
+
+// ADDS A MINIMAP
+var osm2 = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 13, attribution: osmAttrib});
+var miniMap = new L.Control.MiniMap(osm2).addTo(map);
 
 
 
